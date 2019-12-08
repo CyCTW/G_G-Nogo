@@ -6,14 +6,14 @@ using namespace std;
 // #define BLACK 1
 int transform_vertex(string v) {
 	int row, col;
-	row = v[1] - '1';
+	col = v[1] - '1';
 	if (v[0] <= 'z' && v[0] >= 'a') {
-		col = v[0] - 'a';
-		if (v[0] > 'i') col--;
+		row = v[0] - 'a';
+		if (v[0] > 'i') row--;
 	}
 	else if(v[0] <= 'Z' && v[0] >= 'A') {
-		col = v[9] - 'A';
-		if (v[0] > 'I') col--;
+		row = v[0] - 'A';
+		if (v[0] > 'I') row--;
 	}
 	return (row * BoardCol + col);
 }
@@ -67,8 +67,8 @@ int main(int argc, char**argv) {
 
 			int color, pos;
 			string c, v; cin >> c >> v;
-			if (c[0]=='b' || c[0] == 'B') color = 1;
-			else if (c[0]=='w' || c[0] == 'W') color = 0;
+			if (c[0]=='b' || c[0] == 'B') color = 0;
+			else if (c[0]=='w' || c[0] == 'W') color = 1;
 
 			pos = transform_vertex(v);
 			b.add(pos, color);
@@ -84,7 +84,7 @@ int main(int argc, char**argv) {
 				continue;
 			}
 			tree.reset(b);//set board to root board
-			int simulationtime = 5000;
+			int simulationtime = 10000;
 			int simulationcount = 0;
 			while ( simulationcount < simulationtime ){
 				tree.tree_policy();
@@ -94,10 +94,9 @@ int main(int argc, char**argv) {
 			int offset = tree.root->best_child();
 			Node* tmp = tree.root->child;
 			int best_move = (tmp + offset)->place;
-		//	tree.root->showchild();
 			b.add(best_move, !b.take_turn());
 			tree.clear();
-
+			cout << "=" << transform_vertex(best_move)<<"\n\n";
 		}
 		else if(s=="undo") {
 
