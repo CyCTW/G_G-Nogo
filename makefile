@@ -1,3 +1,3 @@
 All:
-	g++ nogo.cpp -Ofast -o nogo
+	g++ nogo.cpp -g -Ofast -o nogo
 

@@ -50,6 +50,8 @@ public:
 		ban[1].clear();
 		notsafe[0].clear();
 		notsafe[1].clear();
+		for(int i=0; i<BoardSize; i++)
+			parent[i] = i;
 		memset(air, 0, sizeof(air));
 		memset(countair, 0, sizeof(countair));
 	}
@@ -74,13 +76,13 @@ public:
 		bitboard tmp;
 		ban[0].add(p);
 		ban[1].add(p);
+		b[color].add(p);
 		int dir[4] = {-9, -1, 1, 9};
 		neighbor(p, dir);
 
 		for (int i=0; i<4; i++) {
 			if (!dir[i]) continue;
 			int m = p + dir[i];
-			cout << "neighbor: " << m << '\n';
 			if ( b[color].check(m) ) {
 				int Pa = findParent(m);
 				tmp |= air[Pa];
@@ -89,6 +91,7 @@ public:
 				unite(Pa, p);
 			}
 			else if ( b[!color].check(m) ) {
+
 				int Pa = findParent(m);
 				air[Pa].minus(m);
 				countair[Pa] = air[Pa].count();
@@ -101,8 +104,8 @@ public:
 			else {
 				notsafe[!color].add(m);
 				tmp.add(m);
+			
 			}
-		cout << "safe";
 			
 		}
 		//p has unite with its neighbor. find the new air
@@ -138,6 +141,45 @@ public:
 		}
 		ban[color].add(p);
 		return false;
+	}
+	
+	int take_turn() {
+		int bc = b[0].count();
+		int wc = b[1].count();
+		if(bc==wc) return WHITE;
+		else return BLACK;
+	}
+	bool lose(int color) {
+		bool lose = true;
+
+		for (int i=0; i<BoardSize; i++) {
+				if (check(i, color)) {
+					lose = false;
+					break;
+				}
+			}
+		return lose;
+	}
+
+	void getv(int b_onego[BoardSize], int w_onego[BoardSize], int twogo[BoardSize], int &bsize, int &wsize, int &tsize) {
+		bool bc, wc;
+		bsize=wsize=tsize = 0;
+		for (int i=0; i<BoardSize; i++) {
+			if (!b[0].check(i) && !b[1].check(i)) {
+				bc = check(i, 0);
+				wc = check(i, 1);
+				if (bc && wc) {
+					twogo[tsize++] = i;
+				}
+				else if(bc) {
+					b_onego[bsize++] = i;
+				}
+				else if(wc) {
+					w_onego[wsize++] = i;
+				}
+			}
+		}
+
 	}
 	void showboard() {
 		for (int i=0; i<BoardSize; i++) {

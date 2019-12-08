@@ -1,5 +1,6 @@
 #include <iostream>
 #include "board.h"
+#include "MonteCarloTree.h"
 using namespace std;
 // #define WHITE 0
 // #define BLACK 1
@@ -22,10 +23,12 @@ string transform_vertex(int v) {
 	s[0] += row, s[1] += col;
 	return s;
 }
+MonteCarloTree tree;
 
 int main(int argc, char**argv) {
 
 	board b;
+	b.clear();
 	string s;
 	while (cin >> s) {
 		//Administrative Commands
@@ -67,11 +70,32 @@ int main(int argc, char**argv) {
 			else if (c[0]=='w' || c[0] == 'W') color = 0;
 
 			pos = transform_vertex(v);
-			cout << pos << '\n';
 			b.add(pos, color);
 			cout << "= \n\n";
 		}
 		else if(s=="genmove") {
+			string s; cin >> s;		
+			int color;
+			color = !b.take_turn();
+			
+			if(b.lose(color)) {
+				cout << "= resign\n\n";
+				continue;
+			}
+			tree.reset(b);//set board to root board
+			int simulationtime = 5000;
+			int simulationcount = 0;
+			while ( simulationcount < simulationtime ){
+				tree.tree_policy();
+				simulationcount++;
+			}
+
+			int offset = tree.root->best_child();
+			Node* tmp = tree.root->child;
+			int best_move = (tmp + offset)->place;
+			tree.root->showchild();
+			b.add(best_move, !b.take_turn());
+			tree.clear();
 
 		}
 		else if(s=="undo") {

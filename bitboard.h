@@ -1,8 +1,9 @@
 #pragma once
 #include <iostream>
 #include <vector>
-#define WHITE 0
-#define BLACK 1
+#define BLACK 0
+#define WHITE 1
+
 #define BoardSize 9*9
 #define BoardCol 9
 using namespace std;
