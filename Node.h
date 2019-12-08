@@ -15,7 +15,7 @@ public:
 	void init_Node(int p, int c) {
 		color = c;
 		place = p;
-		count = 0; win = 0;
+		count = 1; win = 0;
 		c_size = 0;
 		child = NULL;
 	}
@@ -61,8 +61,10 @@ public:
 	}
 	void showchild() {
 		for(int i=0; i<c_size; i++) {
-			cerr << transform_vertex( (int)child[i].place) << ' ' << child[i].win << ' ' << child[i].count << ' ';
-			cerr << "\n\n";
+			if (child[i].count > 5) {
+				cerr << transform_vertex( (int)child[i].place) << ' ' << child[i].win/child[i].count << ' ' << child[i].count << ' ';
+				cerr << "\n\n";
+			}
 		}
 	}
 
