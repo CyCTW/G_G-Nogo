@@ -11,7 +11,11 @@ public:
 
 public:		
 	Node() {}
-	~Node() {}
+	~Node() {
+		if(child != NULL) {
+			delete [] child;child = NULL;
+		}
+	}
 	void init_Node(int p, int c) {
 		color = c;
 		place = p;
