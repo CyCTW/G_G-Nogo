@@ -46,20 +46,20 @@ int main(int argc, char**argv) {
 
 		}
 		else if(s=="quit") {
-			cout << "= \n\n";
+			cout << "=\n\n";
 			return 0;
 		}
 		//Setup Commands
 		else if(s=="boardsize") {
 			string s; cin >> s; 
-			cout << "= \n\n";
+			cout << "=\n\n";
 		}
 		else if(s=="clear_board") {
 			b.clear();
-			cout << "= \n\n";
+			cout << "=\n\n";
 		}
 		else if(s=="komi") {
-			cout << "= \n\n";
+			cout << "=\n\n";
 		}
 
 		//Core Play Commands
@@ -80,11 +80,11 @@ int main(int argc, char**argv) {
 			color = !b.take_turn();
 			
 			if(b.lose(color)) {
-				cout << "= resign\n\n";
+				cout << "=resign\n\n";
 				continue;
 			}
 			tree.reset(b);//set board to root board
-			int simulationtime = 10000;
+			int simulationtime = 50000;
 			int simulationcount = 0;
 			while ( simulationcount < simulationtime ){
 				tree.tree_policy();
