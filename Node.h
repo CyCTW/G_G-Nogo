@@ -7,8 +7,8 @@ public:
 	char place;
 	int c_size;
 	double count;
-	//double win;
-	double means;
+	double win;
+	//double means;
 
 public:		
 	Node() {}
@@ -20,19 +20,19 @@ public:
 	void init_Node(int p, int c) {
 		color = c;
 		place = p;
-		count = 0;
-	       //	win = 0;
-		means = 0.5;
+		count = 1;
+	       	win = 0;
+		//means = 0.5;
 		c_size = 0;
 		child = NULL;
 	}
 	void addresult(double result) {
 		if (result > 0 && color==BLACK || (result == 0 && color==WHITE) ) {
-		//	win++;
-			means = (means*count+1.00)/(count+1);
+			win++;
+			//means = (means*count+1.00)/(count+1);
 		}
-		else
-			means = (means*count)/(count+1);
+	//	else
+			//means = (means*count)/(count+1);
 
 		count++;
 	}
