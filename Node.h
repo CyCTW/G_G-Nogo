@@ -8,6 +8,7 @@ public:
 	int c_size;
 	double count;
 	double win;
+	//double means;
 
 public:		
 	Node() {}
@@ -19,14 +20,20 @@ public:
 	void init_Node(int p, int c) {
 		color = c;
 		place = p;
-		count = 1; win = 0;
+		count = 1;
+	       	win = 0;
+		//means = 0.5;
 		c_size = 0;
 		child = NULL;
 	}
 	void addresult(double result) {
 		if (result > 0 && color==BLACK || (result == 0 && color==WHITE) ) {
 			win++;
+			//means = (means*count+1.00)/(count+1);
 		}
+	//	else
+			//means = (means*count)/(count+1);
+
 		count++;
 	}
 	void expand(board &b) {
@@ -66,7 +73,7 @@ public:
 	void showchild() {
 		for(int i=0; i<c_size; i++) {
 			if (child[i].count > 5) {
-				cerr << transform_vertex( (int)child[i].place) << ' ' << child[i].win/child[i].count << ' ' << child[i].count << ' ';
+				//cerr << transform_vertex( (int)child[i].place) << ' ' << child[i].win/child[i].count << ' ' << child[i].count << ' ';
 				cerr << "\n\n";
 			}
 		}

@@ -51,6 +51,7 @@ int main(int argc, char**argv) {
 		}
 		//Setup Commands
 		else if(s=="boardsize") {
+			string s; cin >> s; 
 			cout << "=\n\n";
 		}
 		else if(s=="clear_board") {
@@ -93,7 +94,6 @@ int main(int argc, char**argv) {
 			int offset = tree.root->best_child();
 			Node* tmp = tree.root->child;
 			int best_move = (tmp + offset)->place;
-			// tree.root->showchild();
 			b.add(best_move, !b.take_turn());
 			tree.clear();
 			cout << "=" << transform_vertex(best_move)<<"\n\n";
@@ -106,7 +106,9 @@ int main(int argc, char**argv) {
 			b.showboard();
 			cout << "=\n\n";
 		}
-
+		else {
+			cout << "=\n\n";
+		}
 
 	}	
 }

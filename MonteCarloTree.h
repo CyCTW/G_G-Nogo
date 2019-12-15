@@ -11,7 +11,7 @@ public:
 	int bsize, wsize, tsize;
 	int b_onego[BoardSize], w_onego[BoardSize], twogo[BoardSize];
 	board root_board;
-
+	const double UCB_weight = sqrt(2);
 
 	MonteCarloTree() {}
 	
@@ -27,8 +27,8 @@ public:
 		int min_count;
 		for (int i=0; i<n->c_size; i++) {
 			Node* ch = n->child + i;
-
-			double score = ( ch->win / ch->count ) + sqrt( log(n->count) / ch->count);
+			
+			double score = ( ch->win / ch->count ) + UCB_weight * sqrt( log(n->count) /(double)(ch->count) );
 			if ( (score <= (max_ans+eps) ) && (score >= (max_ans-eps) ) ) {
 				same_score[idx] = i;
 				idx++;
@@ -156,7 +156,7 @@ public:
 		root = new Node;
 		root->color = root_board.take_turn();
 		root->place = 81;
-		root->count = 0;
+		root->count = 1;
 		root->expand(b);
 
 	}
