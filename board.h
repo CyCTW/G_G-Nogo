@@ -12,37 +12,10 @@ public:
 	char countair[BoardSize];
 
 	bitboard b[2];
-	// void setdata() {
-	// 	memset(air, 0, sizoef(air));
 
-	// 	for (int i=0; i<boardSize; i++) 
-	// 		parent[i] = i;
-	// 	for (int i=0; i<boardSize; i++) {
-	// 		if (i%9 == 0) continue;
-		
-	// 		if (b[0].check(i) && b[0].check(i-1))
-	// 			parent[i] = parent[i-1];
-	// 		else if (b[1].check(i) && b[1].check(i-1))
-	// 			parent[i] = parent[i-1];
-	// 	}
-	// 	for (int j=0; j<boardCol; j++) {
-	// 		for (int i=1; i<boardCol; i++) {
-	// 			int k = i*boardCol + j;
-	// 			if (b[0].check(k) && b[0].check(k-boardCol))
-	// 				unite(k, k-boardCol);
-	// 			else if(b[1].check(k) && b[1].check(k-boardCol))
-	// 				unite(k, k-boardCol);
-	// 		}
-	// 	}
-	// 	getallair();
-	// }
 
 	board() {}
-	// board(bitbaord bb, bitboard ww)  {
-	// 	b[0] = bb;
-	// 	b[1] = ww;
-	// 	setdata();
-	// }
+
 	void clear() {
 		b[0].clear();
 		b[1].clear();

@@ -27,7 +27,7 @@ public:
 		int min_count;
 		for (int i=0; i<n->c_size; i++) {
 			Node* ch = n->child + i;
-			
+
 			double score = ( ch->win / ch->count ) + sqrt( log(n->count) / ch->count);
 			if ( (score <= (max_ans+eps) ) && (score >= (max_ans-eps) ) ) {
 				same_score[idx] = i;
@@ -148,7 +148,7 @@ public:
 				}
 			}
 		}
-		return (color==WHITE)?BLACK:WHITE;
+		return (color==WHITE)?1:0;
 
 	}
 	void reset(board &b) {
