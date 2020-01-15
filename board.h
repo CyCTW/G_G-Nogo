@@ -59,6 +59,7 @@ public:
 		for (int i=0; i<4; i++) {
 			if (!dir[i]) continue;
 			int m = p + dir[i];
+			
 			if ( b[color].check(m) ) {
 				int Pa = findParent(m);
 				tmp |= air[Pa];
@@ -69,7 +70,7 @@ public:
 			else if ( b[!color].check(m) ) {
 
 				int Pa = findParent(m);
-				air[Pa].minus(m);
+				air[Pa].minus(p);
 				countair[Pa] = air[Pa].count();
 
 				if (countair[Pa] == 1){
@@ -95,7 +96,7 @@ public:
 			notsafe[color] |= air[Pa];
 		}
 	}
-
+//check piece, empty return true, invalid return false
 	bool check(int p, int color) {
 
 		if (ban[color].check(p)) return false;

@@ -1,6 +1,10 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <cstdlib>
+#include <cstring>
+#include <cstdio>
+
 #define BLACK 0
 #define WHITE 1
 
@@ -53,6 +57,7 @@ public:
 	}
 	void minus(int i) {
 		b[i >> 6] &= ~(1LL << (i&63));
+		
 	}
 	void showboard(int color = WHITE) {
 
