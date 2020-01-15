@@ -83,7 +83,7 @@ int main(int argc, char**argv) {
 			if (c[0]=='b' || c[0] == 'B') color = 0;
 			else if (c[0]=='w' || c[0] == 'W') color = 1;
 			pos = transform_vertex(v);
-			if ( b.check(pos, color) ) {
+			if ( !b.check(pos, color) ) {
 				cout << "invalid move!\n";
 				return 0;
 			}
