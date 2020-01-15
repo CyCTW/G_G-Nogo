@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <time.h>
+#include <vector>
 
 class MonteCarloTree {
 public:
@@ -28,7 +29,12 @@ public:
 		for (int i=0; i<n->c_size; i++) {
 			Node* ch = n->child + i;
 			
-			double score = ( ch->win / ch->count ) + UCB_weight * sqrt( log(n->count) /(double)(ch->count) );
+			// double score = ( ch->win / ch->count ) + UCB_weight * sqrt( log(n->count) /(double)(ch->count) );
+			double beta = ch->count / (ch->count + ch->rave_count);
+			
+			double score = beta * (ch->win / ch->count)+ (1.0 - beta) * (ch->rave_win / ch->rave_count) 
+			+ UCB_weight * sqrt( log(n->count) /(double)(ch->count) );
+
 			if ( (score <= (max_ans+eps) ) && (score >= (max_ans-eps) ) ) {
 				same_score[idx] = i;
 				idx++;
@@ -45,6 +51,10 @@ public:
 	}
 
 	void select(board &b) {
+		b.b_path.clear();
+		b.w_path.clear();
+
+
 		int color = !b.take_turn();
 
 		Node* current = root;
@@ -56,12 +66,36 @@ public:
 			current = UCB(current);
 			path.push_back(current);
 
+			if (current->color == BLACK) {
+				b.b_path.push_back(current->place);
+			}
+			else if(current->color == WHITE) {
+				b.w_path.push_back(current->place);
+			}
+
 			b.add(current->place, current->color);
 		}
 	}
 	void backpropogate(board &b, double result) {
 		for (int i=0; i<path.size(); i++) {
 			path[i]->addresult(result);
+
+			if (path[i]->color == BLACK) {
+				for (int j=0; j<b.w_path.size(); j++) {
+					int tmp = path[i]->child_appear[ b.w_path[j] ];
+					if ( tmp !=-1) {
+						((path[i]->child) + tmp)->add_raveresult(result);
+					}
+				}
+			}
+			else {
+				for (int j=0; j<b.b_path.size(); j++) {
+					int tmp = path[i]->child_appear[ b.b_path[j] ];
+					if ( tmp !=-1) {
+						((path[i]->child) + tmp)->add_raveresult(result);
+					}
+				}
+			}
 		}
 	}
 	void tree_policy() {
@@ -75,6 +109,14 @@ public:
 		if(last.c_size != 0) {
 			current = UCB(&last);
 			path.push_back(current);
+
+			if (current->color == BLACK) {
+				b.b_path.push_back(current->place);
+			}
+			else if(current->color == WHITE) {
+				b.w_path.push_back(current->place);
+			}
+
 			b.add(current->place, current->color);
 		}
 		b.getv(b_onego, w_onego, twogo, bsize, wsize, tsize);
@@ -103,8 +145,17 @@ public:
 			wc = b.check(p, WHITE);
 
 			if(b.check(p, color)) {
+				
+				if (color == BLACK) {
+					b.b_path.push_back(p);
+				}
+				else if(color == WHITE) {
+					b.w_path.push_back(p);
+				}
+
 				b.add(p, color);
 				color = !color;
+
 			}
 			//two go become one go
 			else {
@@ -126,6 +177,9 @@ public:
 				bsize--;
 
 				if(b.check(p, color)){
+					//b.b_path.push_back(p);
+					
+
 					b.add(p, color); 
 					color = !color;
 
@@ -141,6 +195,8 @@ public:
 				wsize--;
 
 				if(b.check(p, color)){
+					//b.w_path.push_back(p);
+
 					b.add(p, color); 
 					color = !color;
 
@@ -157,6 +213,7 @@ public:
 		root->color = root_board.take_turn();
 		root->place = 81;
 		root->count = 1;
+		root->rave_count = 1;
 		root->expand(b);
 
 	}

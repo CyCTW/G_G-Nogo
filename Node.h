@@ -3,11 +3,14 @@
 class Node {
 public:
 	Node* child;
+	int child_appear[100];
 	int color;
-	char place;
+	int place;
 	int c_size;
 	double count;
+	double rave_count;
 	double win;
+	double rave_win;
 	//double means;
 
 public:		
@@ -21,7 +24,10 @@ public:
 		color = c;
 		place = p;
 		count = 1;
-	       	win = 0;
+	    win = 0;
+	    rave_count = 1;
+	    rave_win = 0;
+		memset(child_appear, -1 ,sizeof(child_appear));
 		//means = 0.5;
 		c_size = 0;
 		child = NULL;
@@ -35,6 +41,16 @@ public:
 			//means = (means*count)/(count+1);
 
 		count++;
+	}
+	void add_raveresult(double result) {
+		if (result > 0 && color==BLACK || (result == 0 && color==WHITE) ) {
+			rave_win++;
+			//means = (means*count+1.00)/(count+1);
+		}
+	//	else
+			//means = (means*count)/(count+1);
+
+		rave_count++;
 	}
 	void expand(board &b) {
 		int c = !b.take_turn();
@@ -51,6 +67,7 @@ public:
 		for (int i=0; i<BoardSize; i++) {
 			if (b.check(i, c)) {
 				child[idx].init_Node(i, c);
+				child_appear[i] = idx;
 
 				idx++;
 			}

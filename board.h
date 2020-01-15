@@ -2,6 +2,7 @@
 #include "bitboard.h"
 #include <iostream>
 #include <cstring>
+#include <vector>
 
 class board {
 public:
@@ -13,6 +14,8 @@ public:
 
 	bitboard b[2];
 
+	vector<int> b_path;
+	vector<int> w_path;
 
 	board() {}
 
