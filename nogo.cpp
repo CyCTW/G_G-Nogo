@@ -6,21 +6,34 @@ using namespace std;
 // #define BLACK 1
 int transform_vertex(string v) {
 	int row, col;
-	col = v[1] - '1';
+	// col = v[1] - '1';
+	// if (v[0] <= 'z' && v[0] >= 'a') {
+	// 	row = v[0] - 'a';
+	// 	if (v[0] > 'i') row--;
+	// }
+	// else if(v[0] <= 'Z' && v[0] >= 'A') {
+	// 	row = v[0] - 'A';
+	// 	if (v[0] > 'I') row--;
+	// }
+	row = 8 - (v[1] - '1');
 	if (v[0] <= 'z' && v[0] >= 'a') {
-		row = v[0] - 'a';
-		if (v[0] > 'i') row--;
+		col = v[0] - 'a';
+		if (v[0] > 'i') col--;
 	}
 	else if(v[0] <= 'Z' && v[0] >= 'A') {
-		row = v[0] - 'A';
-		if (v[0] > 'I') row--;
+		col = v[0] - 'A';
+		if (v[0] > 'I') col--;
 	}
+
 	return (row * BoardCol + col);
 }
 string transform_vertex(int v) {
 	string s = "A1";
 	int row = v / BoardCol, col = v % BoardCol;
-	s[0] += row, s[1] += col;
+	
+	// s[0] += row, s[1] += col;
+	s[0]+=col;
+	s[1]+=(8-row);
 	return s;
 }
 MonteCarloTree tree;
