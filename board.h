@@ -53,6 +53,10 @@ public:
 		ban[0].add(p);
 		ban[1].add(p);
 		b[color].add(p);
+		//cout << "piece = " << color << '\n';
+		//cout << "move to " << p << "\n\n";
+		//showboard();
+		//cout << '\n';
 		int dir[4] = {-9, -1, 1, 9};
 		neighbor(p, dir);
 

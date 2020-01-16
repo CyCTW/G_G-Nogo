@@ -37,7 +37,7 @@ public:
 			win++;
 			means = (means*count+1.00)/(count+1);
 		}
-	//	else
+		else
 			means = (means*count)/(count+1);
 
 		count++;
@@ -47,7 +47,7 @@ public:
 			rave_win++;
 			//means = (means*count+1.00)/(count+1);
 		}
-	//	else
+		else
 			//means = (means*count)/(count+1);
 
 		rave_count++;

@@ -102,6 +102,9 @@ public:
 	void tree_policy() {
 		board b;
 		b = root_board;
+		//cout << "root board\n";
+		//b.showboard();
+
 		select(b);
 		Node &last = *(path.back());
 		Node *current;
@@ -136,7 +139,7 @@ public:
 	}
 	double simulate(board &b, int color) {
 		//srand(time(NULL));
-
+		//cout << "simulation start\n";
 		bool bc, wc;
 		while(tsize > 0) {
 			int randidx = rand()%tsize;
