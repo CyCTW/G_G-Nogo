@@ -12,7 +12,7 @@ public:
 	int bsize, wsize, tsize;
 	int b_onego[BoardSize], w_onego[BoardSize], twogo[BoardSize];
 	board root_board;
-	const double UCB_weight = 1.414;
+	const double UCB_weight = 0.5;
 
 	MonteCarloTree() {}
 	
@@ -67,12 +67,13 @@ public:
 			current = UCB(current);
 			path.push_back(current);
 
-			if (current->color == BLACK) {
+		/*	if (current->color == BLACK) {
 				b.b_path.push_back(current->place);
 			}
 			else if(current->color == WHITE) {
 				b.w_path.push_back(current->place);
 			}
+			*/
 
 			b.add(current->place, current->color);
 		}
@@ -114,14 +115,14 @@ public:
 			if(last.c_size != 0) {
 				current = UCB(&last);
 				path.push_back(current);
-
+/*
 				if (current->color == BLACK) {
 					b.b_path.push_back(current->place);
 				}
 				else if(current->color == WHITE) {
 					b.w_path.push_back(current->place);
 				}	
-
+*/
 				b.add(current->place, current->color);
 			}
 		}
@@ -153,13 +154,13 @@ public:
 
 			if(b.check(p, color)) {
 				
-				if (color == BLACK) {
+/*				if (color == BLACK) {
 					b.b_path.push_back(p);
 				}
 				else if(color == WHITE) {
 					b.w_path.push_back(p);
 				}
-
+*/
 				b.add(p, color);
 				color = !color;
 
