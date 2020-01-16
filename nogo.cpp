@@ -42,6 +42,9 @@ int main(int argc, char**argv) {
 
 	board b;
 	b.clear();
+	tree.clear();
+	srand(time(NULL));
+
 	string s;
 	while (cin >> s) {
 		//Administrative Commands
@@ -83,10 +86,10 @@ int main(int argc, char**argv) {
 			if (c[0]=='b' || c[0] == 'B') color = 0;
 			else if (c[0]=='w' || c[0] == 'W') color = 1;
 			pos = transform_vertex(v);
-			if ( !b.check(pos, color) ) {
-				cout << "invalid move!\n";
-				return 0;
-			}
+			//if ( !b.check(pos, color) ) {
+			//	cout << "invalid move!\n";
+			//	return 0;
+			//}
 
 			b.add(pos, color);
 			cout << "= \n\n";
@@ -101,13 +104,13 @@ int main(int argc, char**argv) {
 				continue;
 			}
 			tree.reset(b);//set board to root board
-			int simulationtime = 10000;
+			int simulationtime = 50000;
 			int simulationcount = 0;
 			while ( simulationcount < simulationtime ){
 				tree.tree_policy();
 				simulationcount++;
 			}
-			tree.root->showchild();
+		//	tree.root->showchild();
 			int offset = tree.root->best_child();
 			Node* tmp = tree.root->child;
 			int best_move = (tmp + offset)->place;

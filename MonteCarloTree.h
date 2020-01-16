@@ -17,7 +17,7 @@ public:
 	MonteCarloTree() {}
 	
 	Node* UCB(Node* n) {
-		srand(time(NULL));
+		//srand(time(NULL));
 
 		if(n->c_size == 0) return NULL;
 		double eps = 1e-3;
@@ -28,12 +28,12 @@ public:
 		int min_count;
 		for (int i=0; i<n->c_size; i++) {
 			Node* ch = n->child + i;
-			
-			double score = ( ch->win / (ch->count+1.0) ) + UCB_weight * sqrt( log(n->count) /(double)(ch->count+1.0) );
+			double score = (ch->means) + UCB_weight * sqrt(log(n->count) / (ch->count+1.0));		
+			//double score = ( ch->win / (ch->count+1.0) ) + UCB_weight * sqrt( log(n->count) /(double)(ch->count+1.0) );
 		//double beta = ch->count / (ch->count + ch->rave_count);
 			
 		//double score = beta * (ch->win / ch->count)+ (1.0 - beta) * (ch->rave_win / ch->rave_count) 
-		+ UCB_weight * sqrt( log(n->count) /(double)(ch->count) );
+	//	+ UCB_weight * sqrt( log(n->count) /(double)(ch->count) );
 
 			if ( (score <= (max_ans+eps) ) && (score >= (max_ans-eps) ) ) {
 				same_score[idx] = i;
@@ -135,7 +135,7 @@ public:
 		backpropogate(b, result);
 	}
 	double simulate(board &b, int color) {
-		srand(time(NULL));
+		//srand(time(NULL));
 
 		bool bc, wc;
 		while(tsize > 0) {

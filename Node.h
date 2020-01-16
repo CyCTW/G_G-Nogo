@@ -11,7 +11,7 @@ public:
 	double rave_count;
 	double win;
 	double rave_win;
-	//double means;
+	double means;
 
 public:		
 	Node() {}
@@ -28,22 +28,22 @@ public:
 	    rave_count = 1;
 	    rave_win = 0;
 		memset(child_appear, -1 ,sizeof(child_appear));
-		//means = 0.5;
+		means = 0.5;
 		c_size = 0;
 		child = NULL;
 	}
 	void addresult(double result) {
-		if (result > 0 && color==BLACK || (result == 0 && color==WHITE) ) {
+		if ((result > 0 && color==BLACK) || (result == 0 && color==WHITE) ) {
 			win++;
-			//means = (means*count+1.00)/(count+1);
+			means = (means*count+1.00)/(count+1);
 		}
 	//	else
-			//means = (means*count)/(count+1);
+			means = (means*count)/(count+1);
 
 		count++;
 	}
 	void add_raveresult(double result) {
-		if (result > 0 && color==BLACK || (result == 0 && color==WHITE) ) {
+		if ((result > 0 && color==BLACK) || (result == 0 && color==WHITE) ) {
 			rave_win++;
 			//means = (means*count+1.00)/(count+1);
 		}
