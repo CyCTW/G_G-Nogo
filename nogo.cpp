@@ -101,13 +101,13 @@ int main(int argc, char**argv) {
 				continue;
 			}
 			tree.reset(b);//set board to root board
-			int simulationtime = 50000;
+			int simulationtime = 10000;
 			int simulationcount = 0;
 			while ( simulationcount < simulationtime ){
 				tree.tree_policy();
 				simulationcount++;
 			}
-
+			tree.root->showchild();
 			int offset = tree.root->best_child();
 			Node* tmp = tree.root->child;
 			int best_move = (tmp + offset)->place;

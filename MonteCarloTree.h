@@ -12,7 +12,7 @@ public:
 	int bsize, wsize, tsize;
 	int b_onego[BoardSize], w_onego[BoardSize], twogo[BoardSize];
 	board root_board;
-	const double UCB_weight = sqrt(2);
+	const double UCB_weight = 1.414;
 
 	MonteCarloTree() {}
 	
@@ -29,11 +29,11 @@ public:
 		for (int i=0; i<n->c_size; i++) {
 			Node* ch = n->child + i;
 			
-			// double score = ( ch->win / ch->count ) + UCB_weight * sqrt( log(n->count) /(double)(ch->count) );
-			double beta = ch->count / (ch->count + ch->rave_count);
+			double score = ( ch->win / (ch->count+1.0) ) + UCB_weight * sqrt( log(n->count) /(double)(ch->count+1.0) );
+		//double beta = ch->count / (ch->count + ch->rave_count);
 			
-			double score = beta * (ch->win / ch->count)+ (1.0 - beta) * (ch->rave_win / ch->rave_count) 
-			+ UCB_weight * sqrt( log(n->count) /(double)(ch->count) );
+		//double score = beta * (ch->win / ch->count)+ (1.0 - beta) * (ch->rave_win / ch->rave_count) 
+		+ UCB_weight * sqrt( log(n->count) /(double)(ch->count) );
 
 			if ( (score <= (max_ans+eps) ) && (score >= (max_ans-eps) ) ) {
 				same_score[idx] = i;
@@ -47,6 +47,7 @@ public:
 		}
 
 		int ans = same_score[ rand() % idx];
+		//int ans = same_score[0];
 		return (n->child + ans);
 	}
 
@@ -80,7 +81,7 @@ public:
 		for (int i=0; i<path.size(); i++) {
 			path[i]->addresult(result);
 
-			if (path[i]->color == BLACK) {
+/*			if (path[i]->color == BLACK) {
 				for (int j=0; j<b.w_path.size(); j++) {
 					int tmp = path[i]->child_appear[ b.w_path[j] ];
 					if ( tmp !=-1) {
@@ -95,7 +96,7 @@ public:
 						((path[i]->child) + tmp)->add_raveresult(result);
 					}
 				}
-			}
+			}*/
 		}
 	}
 	void tree_policy() {
@@ -104,23 +105,25 @@ public:
 		select(b);
 		Node &last = *(path.back());
 		Node *current;
-		last.expand(b);
+		if (last.c_size==0 && last.count > 0) {
+			last.expand(b);
 
-		if(last.c_size != 0) {
-			current = UCB(&last);
-			path.push_back(current);
+			if(last.c_size != 0) {
+				current = UCB(&last);
+				path.push_back(current);
 
-			if (current->color == BLACK) {
-				b.b_path.push_back(current->place);
+				if (current->color == BLACK) {
+					b.b_path.push_back(current->place);
+				}
+				else if(current->color == WHITE) {
+					b.w_path.push_back(current->place);
+				}	
+
+				b.add(current->place, current->color);
 			}
-			else if(current->color == WHITE) {
-				b.w_path.push_back(current->place);
-			}
-
-			b.add(current->place, current->color);
 		}
 		b.getv(b_onego, w_onego, twogo, bsize, wsize, tsize);
-
+		
 		double result;
 		if ( (b.take_turn()==BLACK) && (wsize+tsize)==0 )
 			result = 1;
@@ -131,12 +134,13 @@ public:
 
 		backpropogate(b, result);
 	}
-	double simulate(board b, int color) {
+	double simulate(board &b, int color) {
 		srand(time(NULL));
 
 		bool bc, wc;
 		while(tsize > 0) {
 			int randidx = rand()%tsize;
+			//int randidx = 0;
 			int p = twogo[randidx];
 			twogo[randidx] = twogo[tsize-1];
 			tsize--;
@@ -172,6 +176,7 @@ public:
 		if(color==BLACK) {
 			while(bsize > 0) {
 				int randidx = rand()%bsize;
+			//	int randidx = 0;
 				int p = b_onego[randidx];
 				b_onego[randidx] = b_onego[bsize-1];
 				bsize--;
@@ -212,10 +217,10 @@ public:
 		root = new Node;
 		root->color = root_board.take_turn();
 		root->place = 81;
-		root->count = 1;
+		root->count = 0;
 		root->rave_count = 1;
 		root->expand(b);
-
+		memset(root->child_appear, -1, sizeof(root->child_appear));
 	}
 	void clear() {
 		if (root!=NULL) delete root;
