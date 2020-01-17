@@ -12,7 +12,7 @@ public:
 	int bsize, wsize, tsize;
 	int b_onego[BoardSize], w_onego[BoardSize], twogo[BoardSize];
 	board root_board;
-	const double UCB_weight = 1.414;
+	const double UCB_weight = 0.25;
 
 	MonteCarloTree() {}
 	
@@ -24,10 +24,10 @@ public:
 		double max_ans = -100.0;
 		double same_score[BoardSize];
 		same_score[0] = 0;
-		int idx = 1;
+		int idx = 0;
 		int min_count;
-		for (int i=0; i<n->c_size; i++) {
-			Node* ch = n->child + i;
+		for (int i=0; i<(n->c_size); i++) {
+			Node* ch = (n->child) + i;
 			double score = (ch->means) + UCB_weight * sqrt(log(n->count) / (ch->count+1.0));		
 			//double score = ( ch->win / (ch->count+1.0) ) + UCB_weight * sqrt( log(n->count) /(double)(ch->count+1.0) );
 		//double beta = ch->count / (ch->count + ch->rave_count);
@@ -106,7 +106,7 @@ public:
 		//b.showboard();
 
 		select(b);
-		Node &last = *(path.back());
+		Node &last = (*(path.back()));
 		Node *current;
 		if (last.c_size==0 && last.count > 0) {
 			last.expand(b);
@@ -220,7 +220,7 @@ public:
 		root = new Node;
 		root->color = root_board.take_turn();
 		root->place = 81;
-		root->count = 0;
+		root->count = 1;
 		root->rave_count = 1;
 		root->expand(b);
 		memset(root->child_appear, -1, sizeof(root->child_appear));

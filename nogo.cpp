@@ -2,8 +2,7 @@
 #include "board.h"
 #include "MonteCarloTree.h"
 using namespace std;
-// #define WHITE 0
-// #define BLACK 1
+
 int transform_vertex(string v) {
 	int row, col;
 	// col = v[1] - '1';
@@ -110,7 +109,7 @@ int main(int argc, char**argv) {
 				tree.tree_policy();
 				simulationcount++;
 			}
-			//tree.root->showchild();
+			tree.root->showchild();
 			int offset = tree.root->best_child();
 			Node* tmp = tree.root->child;
 			int best_move = (tmp + offset)->place;
