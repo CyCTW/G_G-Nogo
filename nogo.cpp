@@ -32,6 +32,7 @@ string transform_vertex(int v) {
 	
 	// s[0] += row, s[1] += col;
 	s[0]+=col;
+	if (s[0] >= 'I') s[0]++;
 	s[1]+=(8-row);
 	return s;
 }
