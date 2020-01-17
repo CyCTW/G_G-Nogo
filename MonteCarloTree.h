@@ -12,7 +12,7 @@ public:
 	int bsize, wsize, tsize;
 	int b_onego[BoardSize], w_onego[BoardSize], twogo[BoardSize];
 	board root_board;
-	const double UCB_weight = 0.25;
+	const double UCB_weight = 0.7;
 
 	MonteCarloTree() {}
 	
@@ -106,7 +106,7 @@ public:
 		//b.showboard();
 
 		select(b);
-		Node &last = (*(path.back()));
+		Node &last = *(path.back());
 		Node *current;
 		if (last.c_size==0 && last.count > 0) {
 			last.expand(b);
