@@ -34,7 +34,7 @@ public:
 		c_size = 0;
 		rave_count = 20;
 		rave_means = 0.5;
-		memset(child_appear, 0, sizeof(child_appear));
+		memset(child_appear, -1, sizeof(child_appear));
 		child = NULL;
 		logc = 1;
 	}
@@ -96,8 +96,8 @@ public:
 	}
 	void showchild() {
 		for(int i=0; i<c_size; i++) {
-			if (child[i].count > -1) {
-				cerr << transform_vertex( (int)child[i].place) << ' ' << child[i].win/child[i].count << ' ' << child[i].count << ' ';
+			if (child[i].count > 5) {
+				cerr << transform_vertex( (int)child[i].place) << ' ' << child[i].means << ' ' << child[i].count << ' ';
 				cerr << "\n\n";
 			}
 		}

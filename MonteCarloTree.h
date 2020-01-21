@@ -22,6 +22,7 @@ public:
 		double &NR = tmp->rave_count;
 		double ret = tmp->rave_means*NR + tmp->means * N + sqrt(nodeptr->logc * N) * UCB_weight;
 		return ret / (N+NR);
+	//	return tmp->means + UCB_weight * sqrt(nodeptr->logc / (N+1));
 	}
 	Node* getbestchild(Node* nodeptr) {
 		if(nodeptr->c_size==0) return NULL;
@@ -49,7 +50,8 @@ public:
 		ret = selectlist[rand() % slsize ];
 		return (nodeptr->child + ret);
 
-	}	
+	}
+/*	
 	Node* UCB(Node* n) {
 		//srand(time(NULL));
 
@@ -90,7 +92,7 @@ public:
 		//int ans = same_score[0];
 		return (n->child + ans);
 	}
-
+*/
 	void select(board &b) {
 		b.b_path.clear();
 		b.w_path.clear();
@@ -155,7 +157,8 @@ public:
 			last.expand(b);
 
 			if(last.c_size != 0) {
-				current = UCB(&last);
+				//current = UCB(&last);
+				current = getbestchild(&last);
 				path.push_back(current);
 
 				if (current->color == BLACK) {
@@ -242,7 +245,7 @@ public:
 			while(wsize > 0) {
 				int randidx = rand()%wsize;
 				int p = w_onego[randidx];
-				w_onego[randidx] = w_onego[bsize-1];
+				w_onego[randidx] = w_onego[wsize-1];
 				wsize--;
 
 				if(b.check(p, color)){
