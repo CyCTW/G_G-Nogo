@@ -1,5 +1,5 @@
 #include "board.h"
-
+#include <cmath>
 class Node {
 public:
 	Node* child;
@@ -7,13 +7,19 @@ public:
 	int color;
 	int place;
 	int c_size;
+	
 	double count;
 	double rave_count;
 	double win;
 	double rave_win;
 	double means;
+	double rave_means;
+	double logc;
 
 public:		
+	void setlogc() {
+		logc = log(count);
+	}
 	Node() {}
 	~Node() {
 		if(child != NULL) {
@@ -23,51 +29,52 @@ public:
 	void init_Node(int p, int c) {
 		color = c;
 		place = p;
-		count = 0;
-	    win = 0;
-	    rave_count = 1;
-	    rave_win = 0;
-		memset(child_appear, -1 ,sizeof(child_appear));
 		means = 0.5;
+		count = 0;
 		c_size = 0;
+		rave_count = 20;
+		rave_means = 0.5;
+		memset(child_appear, 0, sizeof(child_appear));
 		child = NULL;
+		logc = 1;
 	}
 	void addresult(double result) {
-		if ((result > 0 && color==BLACK) || (result == 0 && color==WHITE) ) {
-			win++;
+		if ((result > 0 && color==BLACK) || (result < 0 && color==WHITE) ) {
 			means = (means*count+1.00)/(count+1);
 		}
 		else
 			means = (means*count)/(count+1);
 
-		count++;
+		count+=1;
+		setlogc();
 	}
 	void add_raveresult(double result) {
-		if ((result > 0 && color==BLACK) || (result == 0 && color==WHITE) ) {
-			rave_win++;
-			//means = (means*count+1.00)/(count+1);
+		if ((result > 0 && color==BLACK) || (result < 0 && color==WHITE) ) {
+			rave_means = (rave_means*rave_count+1.00)/(rave_count+1);
 		}
 		else
-			//means = (means*count)/(count+1);
+			rave_means = (rave_means*rave_count)/(rave_count+1);
 
-		rave_count++;
+		rave_count+=1;
 	}
 	void expand(board &b) {
 		int c = !b.take_turn();
 		c_size = 0;
+
 		for (int i=0; i<BoardSize; i++) {
 			if (b.check(i, c))
 				c_size++;
 		}
 		if (c_size == 0)
 			return;
+
 		child = new Node[c_size];
 
 		int idx = 0;
 		for (int i=0; i<BoardSize; i++) {
 			if (b.check(i, c)) {
-				child[idx].init_Node(i, c);
 				child_appear[i] = idx;
+				child[idx].init_Node(i, c);
 
 				idx++;
 			}
@@ -76,7 +83,7 @@ public:
 
 	int best_child() {
 		int ind = -1;
-		double maxx = -1, tmp;
+		double maxx = -100, tmp;
 		for (int i=0 ;i<c_size; i++) {
 			tmp = child[i].count;
 			if (tmp > maxx) {
