@@ -16,7 +16,20 @@ public:
 
 	vector<int> b_path;
 	vector<int> w_path;
+	
+	int bpath[91];
+	int bpsize;
+	int wpath[91];
+	int wpsize;
 
+	inline void addbp(int k) {
+		bpath[bpsize] = k;
+		bpsize++;
+	}
+	inline void addwp(int k) {
+		wpath[wpsize] = k;
+		wpsize++;
+	}
 	board() {}
 
 	void clear() {

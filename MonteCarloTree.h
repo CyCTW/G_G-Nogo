@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <vector>
-
+const double UCB_weight = 0.25;
 class MonteCarloTree {
 public:
 	Node* root;
@@ -12,7 +12,6 @@ public:
 	int bsize, wsize, tsize;
 	int b_onego[BoardSize], w_onego[BoardSize], twogo[BoardSize];
 	board root_board;
-	const double UCB_weight = 0.25;
 
 	MonteCarloTree() {}
 	double getscore(Node* nodeptr, int ch) {
@@ -96,7 +95,8 @@ public:
 	void select(board &b) {
 		b.b_path.clear();
 		b.w_path.clear();
-
+		b.bpsize = 0;
+		b.wpsize = 0;
 
 		int color = !b.take_turn();
 
@@ -113,9 +113,11 @@ public:
 
 			if (current->color == BLACK) {
 				b.b_path.push_back(current->place);
+				b.addbp(current->place);
 			}
 			else if(current->color == WHITE) {
 				b.w_path.push_back(current->place);
+				b.addwp(current->place);
 			}
 			
 
@@ -128,7 +130,8 @@ public:
 
 			if (path[i]->color == BLACK) {
 				for (int j=0; j<b.w_path.size(); j++) {
-					int tmp = path[i]->child_appear[ b.w_path[j] ];
+					//int tmp = path[i]->child_appear[ b.w_path[j] ];
+					int tmp = (path[i]->child_appear[b.wpath[j]]);
 					if ( tmp !=-1) {
 						((path[i]->child) + tmp)->add_raveresult(result);
 					}
@@ -136,7 +139,8 @@ public:
 			}
 			else {
 				for (int j=0; j<b.b_path.size(); j++) {
-					int tmp = path[i]->child_appear[ b.b_path[j] ];
+					//int tmp = path[i]->child_appear[ b.b_path[j] ];
+					int tmp = (path[i]->child_appear[b.bpath[j]]);
 					if ( tmp !=-1) {
 						((path[i]->child) + tmp)->add_raveresult(result);
 					}
@@ -162,10 +166,12 @@ public:
 				path.push_back(current);
 
 				if (current->color == BLACK) {
-					b.b_path.push_back(current->place);
+					//b.b_path.push_back(current->place);
+					b.addbp(current->place);
 				}
 				else if(current->color == WHITE) {
-					b.w_path.push_back(current->place);
+					//b.w_path.push_back(current->place);
+					b.addwp(current->place);
 				}	
 
 				b.add(current->place, current->color);
@@ -201,9 +207,13 @@ public:
 				
 				if (color == BLACK) {
 					b.b_path.push_back(p);
+					b.bpath[b.bpsize] = p;
+					b.bpsize++;
 				}
 				else if(color == WHITE) {
 					b.w_path.push_back(p);
+					b.wpath[b.wpsize] = p;
+					b.wpsize++;
 				}
 
 				b.add(p, color);
