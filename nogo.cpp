@@ -92,6 +92,7 @@ int main(int argc, char**argv) {
 			//}
 
 			b.add(pos, color);
+			b.showboard();
 			cout << "= \n\n";
 		}
 		else if(s=="genmove") {
@@ -104,7 +105,7 @@ int main(int argc, char**argv) {
 				continue;
 			}
 			tree.reset(b);//set board to root board
-			int simulationtime = 40000;
+			int simulationtime = 30000;
 			int simulationcount = 0;
 			while ( simulationcount < simulationtime ){
 				tree.tree_policy(simulationcount);
@@ -115,6 +116,7 @@ int main(int argc, char**argv) {
 			Node* tmp = tree.root->child;
 			int best_move = (tmp + offset)->place;
 			b.add(best_move, !b.take_turn());
+			b.showboard();
 			tree.clear();
 			cout << "=" << transform_vertex(best_move)<<"\n\n";
 		}
