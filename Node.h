@@ -58,6 +58,7 @@ public:
 		rave_count+=1;
 	}
 	void expand(board &b) {
+		//cout << "start expand:\n";
 		int c = !b.take_turn();
 		c_size = 0;
 
@@ -98,6 +99,7 @@ public:
 		for(int i=0; i<c_size; i++) {
 			if (child[i].count > 5) {
 				cerr << transform_vertex( (int)child[i].place) << ' ' << child[i].means << ' ' << child[i].count << ' ';
+				cerr << child[i].rave_means << ' ' << child[i].rave_count;
 				cerr << "\n\n";
 			}
 		}

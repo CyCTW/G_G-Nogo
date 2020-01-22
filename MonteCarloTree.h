@@ -9,6 +9,8 @@ class MonteCarloTree {
 public:
 	Node* root;
 	vector<Node*> path;
+	int selectlist[BoardSize];
+	int slsize;
 	int bsize, wsize, tsize;
 	int b_onego[BoardSize], w_onego[BoardSize], twogo[BoardSize];
 	board root_board;
@@ -28,9 +30,8 @@ public:
 		int i, ret = 0;
 		double ans, tmp = getscore(nodeptr, 0), tma;
 		ans=tmp;
-		int selectlist[91];
 		selectlist[0] = 0;
-		int slsize = 1;
+		slsize = 1;
 		for (int i=1; i<(nodeptr->c_size); i++) {
 			tmp = getscore(nodeptr, i);
 			tma = tmp-ans;
@@ -93,6 +94,8 @@ public:
 	}
 */
 	void select(board &b) {
+		//cout << "start select:" << "\n";
+	//	b.showboard();
 		b.b_path.clear();
 		b.w_path.clear();
 		b.bpsize = 0;
@@ -122,14 +125,30 @@ public:
 			
 
 			b.add(current->place, current->color);
+		//	b.showboard();
 		}
 	}
 	void backpropogate(board &b, double result) {
+		//cout << "start update:\n";
+		//cout << "result= " << result;
+
 		for (int i=0; i<path.size(); i++) {
 			path[i]->addresult(result);
+			/*cout << "child appear for node" << i << "\n";
+			for(int j=0; j<81; j++) {
+				if (path[i]->child_appear[j]!=-1)
+					cout << path[i]->child_appear[j] << ' ';
+			}
+			cout << '\n';
+			for (int j=0; j<b.wpsize; j++)
+				cout << b.wpath[j] << ' ';
+			cout << '\n';
+			for (int j=0; j<b.bpsize; j++)
+				cout << b.bpath[j] << ' ';
+			cout << '\n';*/
 
 			if (path[i]->color == BLACK) {
-				for (int j=0; j<b.w_path.size(); j++) {
+				for (int j=0; j<b.wpsize; j++) {
 					//int tmp = path[i]->child_appear[ b.w_path[j] ];
 					int tmp = (path[i]->child_appear[b.wpath[j]]);
 					if ( tmp !=-1) {
@@ -138,7 +157,7 @@ public:
 				}
 			}
 			else {
-				for (int j=0; j<b.b_path.size(); j++) {
+				for (int j=0; j<b.bpsize; j++) {
 					//int tmp = path[i]->child_appear[ b.b_path[j] ];
 					int tmp = (path[i]->child_appear[b.bpath[j]]);
 					if ( tmp !=-1) {
@@ -175,6 +194,7 @@ public:
 				}	
 
 				b.add(current->place, current->color);
+				//b.showboard();
 			}
 		}
 		b.getv(b_onego, w_onego, twogo, bsize, wsize, tsize);
@@ -184,9 +204,10 @@ public:
 			result = 1;
 		else if ((b.take_turn()==WHITE) && (bsize+tsize)==0 )
 			result = -1;
-		else
-			result = simulate(b, !b.take_turn());
-
+		else {
+			//result = simulate(b, !b.take_turn());
+			result = b.simulate(!b.take_turn(), b_onego, w_onego, twogo, bsize, wsize, tsize);
+		}
 		backpropogate(b, result);
 	}
 	int simulate(board &b, int color) {
@@ -279,8 +300,8 @@ public:
 		root->count = 0;
 		root->logc = 1;
 		//root->rave_count = 1;
-		root->expand(b);
 		memset(root->child_appear, -1, sizeof(root->child_appear));
+		root->expand(b);
 	}
 	void clear() {
 		if (root!=NULL) delete root;

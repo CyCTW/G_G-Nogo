@@ -185,6 +185,95 @@ public:
 				cout << '.';
 			if ( (i+1)%BoardCol == 0)
 				cout << '\n';
+		
 		}
+		cout << "\n\n";
 	}
+double simulate(int j,int bone[BoardSize],int wone[BoardSize],int two[BoardSize] ,int bsize,int wsize ,int tsize )
+{
+//cout << "start simulate\n";
+    int i,k;
+    bool bc,wc;
+FLAG:
+	// showboard();
+	// system("pause");
+    while(tsize>0)
+    {
+        i=rand()%tsize;
+        k=two[i];
+        two[i]=two[tsize-1];
+        tsize--;
+        bc=check(k,0);
+        wc=check(k,1);
+        if(check(k,j) )
+        {
+            if(j==0)
+            {
+                bpath[bpsize] = k;
+                bpsize++;
+            }
+            else
+            {
+                wpath[wpsize] = k;
+                wpsize++;
+            }
+            add(k,j);
+	  //  showboard();
+            j=!j;
+            goto FLAG;
+        }else{
+            if(!bc && wc)
+            {
+                wone[wsize]=k;
+                wsize++;
+            }
+            else if(bc && !wc)
+            {
+                bone[bsize]=k;
+                bsize++;
+            }
+        }
+    }
+FLAG2 :
+    if(j==0)
+    {
+
+        while(bsize>0)
+        {
+            i=rand()%bsize;
+            k=bone[i];
+            bone[i]=bone[bsize-1];
+            bsize--;
+            if(check(k,j))
+            {
+                add(k,j);
+	//	showboard();
+                // bpath[bpsize] = k;
+                // bpsize++;
+                j=!j;
+                goto FLAG2;
+            }
+        }
+    }
+    else
+    {
+        while(wsize>0)
+        {
+            i=rand()%wsize;
+            k=wone[i];
+            wone[i]=wone[wsize-1];
+            wsize--;
+            if(check(k,j))
+            {
+                add(k,j);
+	//	showboard();
+                j=!j;
+                //  wpath[wpsize] = k;
+                //  wpsize++;
+                goto FLAG2;
+            }
+        }
+    }
+    return (j==1)?1:-1;
+}
 };
