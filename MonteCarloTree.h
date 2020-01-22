@@ -33,16 +33,17 @@ public:
 	}
 	Node* getbestchild(Node* nodeptr) {
 		if(nodeptr->c_size==0) return NULL;
-		int i, ret = 0;
-		double ans, tmp = getscore(nodeptr, 0), tma;
+		double tmp = getscore(nodeptr, 0);
+		double ans, tma;
 		ans=tmp;
 		selectlist[0] = 0;
 		slsize = 1;
+		double eps = 1e-4;
 		for (int i=1; i<(nodeptr->c_size); i++) {
 			tmp = getscore(nodeptr, i);
 			tma = tmp-ans;
-			if (tma > -0.0001) {
-				if(tma > 0.0001) {
+			if (tma > -eps) {
+				if(tma > eps) {
 					selectlist[0] = i;
 					slsize = 1;
 					ans = tmp;
@@ -53,7 +54,7 @@ public:
 				}
 			}
 		}
-		ret = selectlist[rand() % slsize ];
+		int ret = selectlist[rand() % slsize ];
 		return (nodeptr->child + ret);
 
 	}
@@ -102,8 +103,8 @@ public:
 	void select(board &b) {
 		//cout << "start select:" << "\n";
 	//	b.showboard();
-		b.b_path.clear();
-		b.w_path.clear();
+		//b.b_path.clear();
+		//b.w_path.clear();
 		b.bpsize = 0;
 		b.wpsize = 0;
 
@@ -121,11 +122,11 @@ public:
 			path.push_back(current);
 
 			if (current->color == BLACK) {
-				b.b_path.push_back(current->place);
+				//b.b_path.push_back(current->place);
 				b.addbp(current->place);
 			}
 			else if(current->color == WHITE) {
-				b.w_path.push_back(current->place);
+				//b.w_path.push_back(current->place);
 				b.addwp(current->place);
 			}
 			
@@ -212,8 +213,8 @@ public:
 		else if ((b.take_turn()==WHITE) && (bsize+tsize)==0 )
 			result = -1;
 		else {
-			//result = simulate(b, !b.take_turn());
-			result = b.simulate(!b.take_turn(), b_onego, w_onego, twogo, bsize, wsize, tsize);
+			result = simulate(b, !b.take_turn());
+			//result = b.simulate(!b.take_turn(), b_onego, w_onego, twogo, bsize, wsize, tsize);
 		}
 		backpropogate(b, result);
 	}
@@ -234,12 +235,12 @@ public:
 			if(b.check(p, color)) {
 				
 				if (color == BLACK) {
-					b.b_path.push_back(p);
+					//b.b_path.push_back(p);
 					b.bpath[b.bpsize] = p;
 					b.bpsize++;
 				}
 				else if(color == WHITE) {
-					b.w_path.push_back(p);
+					//b.w_path.push_back(p);
 					b.wpath[b.wpsize] = p;
 					b.wpsize++;
 				}

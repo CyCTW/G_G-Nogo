@@ -14,8 +14,8 @@ public:
 
 	bitboard b[2];
 
-	vector<int> b_path;
-	vector<int> w_path;
+//	vector<int> b_path;
+//	vector<int> w_path;
 	
 	int bpath[91];
 	int bpsize;
@@ -30,6 +30,7 @@ public:
 		wpath[wpsize] = k;
 		wpsize++;
 	}
+	
 	board() {}
 
 	void clear() {
@@ -188,7 +189,9 @@ public:
 		
 		}
 		cout << "\n\n";
+	
 	}
+	/*
 double simulate(int j,int bone[BoardSize],int wone[BoardSize],int two[BoardSize] ,int bsize,int wsize ,int tsize )
 {
 //cout << "start simulate\n";
@@ -275,5 +278,5 @@ FLAG2 :
         }
     }
     return (j==1)?1:-1;
-}
+}*/
 };
