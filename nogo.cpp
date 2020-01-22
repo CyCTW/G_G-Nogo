@@ -104,10 +104,10 @@ int main(int argc, char**argv) {
 				continue;
 			}
 			tree.reset(b);//set board to root board
-			int simulationtime = 50000;
+			int simulationtime = 40000;
 			int simulationcount = 0;
 			while ( simulationcount < simulationtime ){
-				tree.tree_policy();
+				tree.tree_policy(simulationcount);
 				simulationcount++;
 			}
 			tree.root->showchild();

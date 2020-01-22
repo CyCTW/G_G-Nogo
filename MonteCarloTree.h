@@ -5,6 +5,7 @@
 #include <time.h>
 #include <vector>
 const double UCB_weight = 0.25;
+int sim_cnt;
 class MonteCarloTree {
 public:
 	Node* root;
@@ -21,8 +22,13 @@ public:
 		Node *tmp = (nodeptr->child)+ch;
 		double &N = tmp->count;
 		double &NR = tmp->rave_count;
-		double ret = tmp->rave_means*NR + tmp->means * N + sqrt(nodeptr->logc * N) * UCB_weight;
-		return ret / (N+NR);
+		double beta = N / (N+NR);
+		//double beta = (sim_cnt / 50010.0);
+		//sim_cnt++;
+		double ret = (1-beta) * tmp->rave_means + (beta) * (tmp->means + sqrt(nodeptr->logc / (N+1)) * UCB_weight);
+		return ret;
+		//double ret = tmp->rave_means*NR + tmp->means * N + sqrt(nodeptr->logc * N) * UCB_weight;
+		//return ret / (N+NR);
 	//	return tmp->means + UCB_weight * sqrt(nodeptr->logc / (N+1));
 	}
 	Node* getbestchild(Node* nodeptr) {
@@ -167,7 +173,8 @@ public:
 			}
 		}
 	}
-	void tree_policy() {
+	void tree_policy(int cnt) {
+		sim_cnt = sim_cnt;
 		board b;
 		b = root_board;
 		//cout << "root board\n";
